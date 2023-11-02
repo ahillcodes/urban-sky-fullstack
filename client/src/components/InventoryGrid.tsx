@@ -20,6 +20,9 @@ import {
     GridRowEditStopReasons,
 } from '@mui/x-data-grid';
 
+import { randProductName, randNumber, randProductDescription } from '@ngneat/falso';
+
+
 import { trpc } from '../utils/trpc';
 
 interface EditToolbarProps {
@@ -31,8 +34,9 @@ interface EditToolbarProps {
 
 function EditToolbar(props: EditToolbarProps) {
     const { setRows, setRowModesModel } = props;
+    const createMutation = trpc.inventoryItems.create.useMutation();
 
-    const handleClick = () => {
+    const handleAddClick = () => {
         const id = '';
         setRows((oldRows) => [...oldRows, { id: '', name: '', age: '', isNew: true }]);
         setRowModesModel((oldModel) => ({
@@ -41,10 +45,27 @@ function EditToolbar(props: EditToolbarProps) {
         }));
     };
 
+    const handleRandomClick = async () => {
+        const randoData = {
+            name: randProductName(),
+            serial: randNumber().toString(),
+            description: randProductDescription(),
+            quantity: randNumber(),
+        }
+        const response = await createMutation.mutateAsync(randoData);
+        console.log(response[0]);
+        const updatedRow = { ...randoData, ...response[0], isNew: true };
+        setRows((oldRows) => [...oldRows, updatedRow]);
+        return updatedRow;
+    };
+
     return (
         <GridToolbarContainer>
-            <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+            <Button color="primary" startIcon={<AddIcon />} onClick={handleAddClick}>
                 Add record
+            </Button>
+            <Button color="primary" startIcon={<AddIcon />} onClick={handleRandomClick}>
+                Add random item
             </Button>
         </GridToolbarContainer>
     );
