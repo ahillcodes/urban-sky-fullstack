@@ -43,6 +43,7 @@ export interface IInsertInventoryItemParams {
 
 /** 'InsertInventoryItem' return type */
 export interface IInsertInventoryItemResult {
+  created_at: Date | null;
   id: number;
 }
 
@@ -52,14 +53,14 @@ export interface IInsertInventoryItemQuery {
   result: IInsertInventoryItemResult;
 }
 
-const insertInventoryItemIR: any = {"usedParamSet":{"item":true},"params":[{"name":"item","required":false,"transform":{"type":"pick_tuple","keys":[{"name":"serial","required":false},{"name":"name","required":false},{"name":"description","required":false},{"name":"quantity","required":false}]},"locs":[{"a":73,"b":77}]}],"statement":"INSERT INTO inventory_items (serial, name, description, quantity)\nVALUES :item\nRETURNING id"};
+const insertInventoryItemIR: any = {"usedParamSet":{"item":true},"params":[{"name":"item","required":false,"transform":{"type":"pick_tuple","keys":[{"name":"serial","required":false},{"name":"name","required":false},{"name":"description","required":false},{"name":"quantity","required":false}]},"locs":[{"a":73,"b":77}]}],"statement":"INSERT INTO inventory_items (serial, name, description, quantity)\nVALUES :item\nRETURNING id, created_at"};
 
 /**
  * Query generated from SQL:
  * ```
  * INSERT INTO inventory_items (serial, name, description, quantity)
  * VALUES :item
- * RETURNING id
+ * RETURNING id, created_at
  * ```
  */
 export const insertInventoryItem = new PreparedQuery<IInsertInventoryItemParams,IInsertInventoryItemResult>(insertInventoryItemIR);

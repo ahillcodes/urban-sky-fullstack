@@ -9,7 +9,7 @@ SELECT * FROM inventory_items;
 */
 INSERT INTO inventory_items (serial, name, description, quantity)
 VALUES :item
-RETURNING id;
+RETURNING id, created_at;
 
 /* 
     @name UpdateInventoryItem 
